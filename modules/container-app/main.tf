@@ -20,6 +20,7 @@ resource "azurerm_container_app" "container_apps" {
       image  = each.value.image
       cpu    = each.value.cpu
       memory = each.value.memory
+      
 
       dynamic "env" {
         for_each = each.value.secrets
@@ -30,14 +31,19 @@ resource "azurerm_container_app" "container_apps" {
         }
       }
     }
-
   }
 
 
   secret {
     name                = var.db_secret_name
     identity            = var.app_identity_id
-    key_vault_secret_id = var.key_vault_secret_id
+    key_vault_secret_id = var.key_vault_db_secret_id
+  }
+
+ secret {
+    name                = var.service_bus_secret_name
+    identity            = var.app_identity_id
+    key_vault_secret_id = var.key_vault_service_bus_secret_id
   }
 
   identity {
@@ -49,7 +55,7 @@ resource "azurerm_container_app" "container_apps" {
   ingress {
     allow_insecure_connections = false
     external_enabled           = true
-    target_port                = each.value.port
+    target_port                = each.value.PORT
     transport                  = "auto"
 
     traffic_weight {

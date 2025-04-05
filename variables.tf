@@ -26,6 +26,10 @@ variable "db_secret_name" {
   type = string
 }
 
+variable "service_bus_secret_name" {
+  type = string
+}
+
 
 
 variable "nw_data" {
@@ -50,8 +54,17 @@ variable "container_app" {
       cpu    = number
       memory = string
       secrets = map(object({
-        isSecretRef = bool
+        isSecretRef  = bool
         secret_value = string
       }))
+  }))
+}
+
+
+variable "subscriptions" {
+  type = list(object({
+    name         = string
+    filter_type  = string
+    filter_value = string
   }))
 }

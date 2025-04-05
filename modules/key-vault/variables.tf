@@ -5,6 +5,10 @@ variable "db_secret_name" {
   type = string
 }
 
+variable "service_bus_secret_name" {
+  type = string
+}
+
 variable "rg_name" {
   type        = string
   description = "Name of the resource"
@@ -29,5 +33,8 @@ variable "app_identity_tenant_id"{
 }
 
 variable "cosmos_db_connection_string" {
+  type = string
+}
+variable "azure_service_bus_connection_string"{
   type = string
 }

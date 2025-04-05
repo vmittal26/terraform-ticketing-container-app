@@ -29,6 +29,15 @@ module "cosmos-db" {
   rg_name            = var.rg_name
   depends_on         = [module.resource-group, module.vnet]
 }
+module "service-bus"{
+  source = "./modules/service-bus"
+  virtual_network_id = module.vnet.virtual_network_id
+  service_bus_subnet_id =  module.vnet.service_bus_subnet_id
+  rg_location = var.rg_location
+  rg_name = var.rg_name
+  subscriptions = var.subscriptions
+  depends_on         = [module.resource-group, module.vnet]
+}
 
 module "keyvault" {
   source                      = "./modules/key-vault"
@@ -40,7 +49,9 @@ module "keyvault" {
   app_identity_principal_id   = module.identity.app_identity_principal_id
   app_identity_tenant_id      = module.identity.app_identity_tenant_id
   cosmos_db_connection_string = module.cosmos-db.cosmos_db_connection_string
-  depends_on                  = [module.resource-group, module.identity, module.cosmos-db]
+  service_bus_secret_name =  var.service_bus_secret_name
+  azure_service_bus_connection_string = module.service-bus.azure_service_bus_connection_string
+  depends_on                  = [module.resource-group, module.identity, module.cosmos-db, module.service-bus]
 
 }
 
@@ -53,8 +64,10 @@ module "container_app" {
   app_subnet_id       = module.vnet.container_subnet_id
   app_identity_id     = module.identity.app_identity_id
   key_vault_id        = module.keyvault.key_vault_id
-  key_vault_secret_id = module.keyvault.key_vault_secret_id
+  key_vault_db_secret_id = module.keyvault.key_vault_db_secret_id
+  key_vault_service_bus_secret_id =  module.keyvault.key_vault_service_bus_secret_id
   db_secret_name      = var.db_secret_name
+  service_bus_secret_name =  var.service_bus_secret_name
   depends_on          = [module.keyvault, module.vnet]
 }
 

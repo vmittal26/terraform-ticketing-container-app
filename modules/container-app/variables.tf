@@ -3,6 +3,10 @@ variable "db_secret_name" {
   type = string
 }
 
+variable "service_bus_secret_name" {
+  type = string
+}
+
 variable "virtual_network_id" {
   type = string
 }
@@ -29,7 +33,11 @@ variable "key_vault_id" {
   type = string
 }
 
-variable "key_vault_secret_id" {
+variable "key_vault_db_secret_id" {
+  type = string
+}
+
+variable "key_vault_service_bus_secret_id" {
   type = string
 }
 

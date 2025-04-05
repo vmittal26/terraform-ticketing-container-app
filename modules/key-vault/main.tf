@@ -13,8 +13,14 @@ resource "azurerm_role_assignment" "role_assigment" {
   role_definition_id = "${data.azurerm_subscription.current.id}${data.azurerm_role_definition.role.id}"
   principal_id       = var.app_identity_principal_id
 }
-resource "azurerm_key_vault_secret" "secret" {
+resource "azurerm_key_vault_secret" "db_secret" {
   name         = var.db_secret_name
   value        = var.cosmos_db_connection_string
+  key_vault_id = data.azurerm_key_vault.vault-ticketing.id
+}
+
+resource "azurerm_key_vault_secret" "azure_service_bus_secret" {
+  name         = var.service_bus_secret_name
+  value        = var.azure_service_bus_connection_string
   key_vault_id = data.azurerm_key_vault.vault-ticketing.id
 }

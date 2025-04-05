@@ -13,6 +13,9 @@ nw_data = {
       }
       pe-subnet = {
         address_space = "10.0.1.0/24"
+      },
+      service-bus-subnet = {
+        address_space = "10.0.2.0/24"
       }
       app-subnet = {
         address_space = "10.0.4.0/23"
@@ -23,6 +26,8 @@ nw_data = {
 }
 
 db_secret_name = "mongo-db-conn-str"
+service_bus_secret_name = "service-bus-conn-string"
+
 container_app = {
   auth = {
     name   = "auth"
@@ -85,3 +90,16 @@ container_app = {
   }
 
 }
+
+subscriptions = [
+    {
+      name         = "ticket"
+      filter_type  = "SqlFilter"
+      filter_value = "eventType = 'ticket-created'"
+    },
+    {
+      name         = "order"
+      filter_type  = "SqlFilter"
+      filter_value = "eventType = 'order-created'"
+    }
+  ]
